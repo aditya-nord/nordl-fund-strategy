@@ -25,6 +25,10 @@ const pendingPricesForAllTokens = async () => {
             const diffTimeInSeconds = todayDate.unix() - lastDate.unix()
             const numberOfDays = Math.ceil(diffTimeInSeconds / (60 * 60 * 24));
 
+            if (numberOfDays <= 1) {
+                continue;
+            }
+
             const priceFeeds: [[number, number]] = await getMarketCharts(asset.cgTokenId, numberOfDays);
 
             for (let i = 0; i < priceFeeds.length; i++) {

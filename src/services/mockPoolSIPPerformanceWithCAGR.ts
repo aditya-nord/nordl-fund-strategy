@@ -61,7 +61,7 @@ const mockPoolSIPPerformanceWithCAGR = async (assets: PoolAssets[], frqInDays: n
 
         for (let i = investmentCount - 1, j = 1; i >= 0; i--, j++) {
             const diffInUTC = dayjs().utcOffset();
-            const forDate = dayjs().subtract(i, dayJsUnit).hour(0).minute(0).second(0).millisecond(0).add(diffInUTC, "minute");
+            const forDate = dayjs().subtract(i, dayJsUnit).subtract(1, "day").hour(0).minute(0).second(0).millisecond(0).add(diffInUTC, "minute");
 
             const calculatedDetails = await calculationsAtADate(
                 assets,
@@ -96,19 +96,26 @@ const mockPoolSIPPerformanceWithCAGR = async (assets: PoolAssets[], frqInDays: n
         const cagrForSIP = ((((lastCostPerUnit.div(baseUnitPrice)).toNumber()) ** (1 / n) - 1) * 100);
         console.log(`For Mock Pool SIP of ${n} years CAGR is ${cagrForSIP}`);
 
-        const returns = worthNow.sub(totalInvestedAmountInUSD).div(totalInvestedAmountInUSD.div(100))
-        console.log(`Mock Pool SIP returns are: ${returns}`)
+        const absoluteReturns = worthNow.sub(totalInvestedAmountInUSD).div(totalInvestedAmountInUSD.div(100)).toFixed(4);
+        console.log(`Mock Pool SIP returns are: ${absoluteReturns}`)
 
-        const jsonData = JSON.stringify({ resultData });
-        fs.writeFile("poolSIPMocked-" + fileName + ".json", jsonData, (err: any) => {
-            if (err) {
-                throw err;
-            }
-            console.log("JSON data is saved with filename : poolSIPMocked-" + fileName + ".json");
-        });
-        return returns;
+        // const jsonData = JSON.stringify({ resultData });
+        // fs.writeFile("poolSIPMocked-" + fileName + ".json", jsonData, (err: any) => {
+        //     if (err) {
+        //         throw err;
+        //     }
+        //     console.log("JSON data is saved with filename : poolSIPMocked-" + fileName + ".json");
+        // });
+        return {
+            startPoolDate: dayjs().subtract((investmentCount - 1), dayJsUnit).subtract(1, "day").hour(0).minute(0).second(0).millisecond(0).add(dayjs().utcOffset(), "minute"),
+            endPoolDate: dayjs().subtract(1, "day").hour(0).minute(0).second(0).millisecond(0).add(dayjs().utcOffset(), "minute"),
+            absoluteReturns,
+            cagrValue: cagrForSIP,
+            graphDataPoints: resultData
+        };
     } catch (error) {
         console.error(error)
+        return null;
     }
 }
 
