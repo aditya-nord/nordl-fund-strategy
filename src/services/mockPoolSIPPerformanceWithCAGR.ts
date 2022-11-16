@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 import dayjs, { ManipulateType } from "dayjs";
 import findAssetPriceOnDate from "../repository/findAssetPriceOnDate";
 import findAssetDetailsByCGID from "../repository/findAssetDetailsByCGID";
+import getAssetAveragePrice from "../repository/getAssetAveragePrice";
 
 export interface PoolAssets {
     assetAllocationPercent: number,
@@ -59,15 +60,17 @@ const mockPoolSIPPerformanceWithCAGR = async (assets: PoolAssets[], frqInDays: n
         let totalShareBalance = new Prisma.Decimal(0);
 
 
-        for (let i = investmentCount - 1, j = 1; i >= 0; i--, j++) {
+        for (let i = investmentCount, j = 1; i > 0; i--, j++) {
             const diffInUTC = dayjs().utcOffset();
             const forDate = dayjs().subtract(i, dayJsUnit).subtract(1, "day").hour(0).minute(0).second(0).millisecond(0).add(diffInUTC, "minute");
+            const toDate = forDate.add(frqInDays, "day").toDate();
 
             const calculatedDetails = await calculationsAtADate(
                 assets,
                 poolBalances,
                 amountInUSD,
                 forDate.toDate(),
+                toDate,
                 totalShareBalance,
                 j == 1,
                 new Prisma.Decimal(baseUnitPrice)
@@ -122,7 +125,9 @@ const mockPoolSIPPerformanceWithCAGR = async (assets: PoolAssets[], frqInDays: n
 const calculationsAtADate = async (
     assets: PoolAssets[],
     poolBalances: PoolAssetDetails[],
-    amountInUSD: number, forDate: Date,
+    amountInUSD: number,
+    forDate: Date,
+    toDate: Date,
     totalShareBalance: Prisma.Decimal,
     firstPurchase: boolean,
     baseUnitPrice: Prisma.Decimal
@@ -137,7 +142,8 @@ const calculationsAtADate = async (
             if (!asset) {
                 throw new Error("Asset not found")
             }
-            const priceEntry = await findAssetPriceOnDate(asset.id, forDate);
+
+            const priceEntry = await getAssetAveragePrice(asset.id, forDate, toDate);
             if (!priceEntry) {
                 throw new Error(`Couldn't get the prices for ${asset.id} - ${forDate.toString()}`);
             }
@@ -147,18 +153,18 @@ const calculationsAtADate = async (
                 throw new Error("NOT FOUND poolAssetBalance")
             }
 
-            const prevAssetWorth = poolBalances[z].assetBalance.mul(priceEntry.price)
-            prevPoolAssetsWorth = poolAssetsWorth.add(prevAssetWorth);
+            const prevAssetWorth = poolBalances[z].assetBalance.mul(priceEntry)
+            prevPoolAssetsWorth = prevPoolAssetsWorth.add(prevAssetWorth);
 
             const amountInUSDForAssetSplit = amountInUSD * (assets[i].assetAllocationPercent / 100);
-            const assetBalanceUpdate = Prisma.Decimal.div(amountInUSDForAssetSplit, priceEntry.price);
+            const assetBalanceUpdate = Prisma.Decimal.div(amountInUSDForAssetSplit, priceEntry);
             const newAssetBalance = poolBalances[z].assetBalance.add(assetBalanceUpdate)
-            const newAssetWorth = newAssetBalance.mul(priceEntry.price)
+            const newAssetWorth = newAssetBalance.mul(priceEntry)
 
             updatedPoolBalances.push({
                 assetId: assets[i].assetId,
                 assetAllocationPercent: assets[i].assetAllocationPercent,
-                assetPrice: priceEntry.price,
+                assetPrice: priceEntry,
                 assetBalance: newAssetBalance,
                 worthInUSD: newAssetWorth
             })

@@ -40,7 +40,9 @@ const pendingPricesForAllTokens = async () => {
                 const price = priceDetails[1];
 
                 const entry = await createNewAssetPriceEntry(asset.id, price, priceTimestamp);
-                console.log(`entry made with id: ${entry.id} - ${entry.priceTimestamp} and price: ${entry.price}`)
+                if (entry) {
+                    console.log(`entry made with id: ${entry.id} - ${entry.priceTimestamp} and price: ${entry.price}`)
+                }
             }
         }
 

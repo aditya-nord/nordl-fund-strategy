@@ -11,30 +11,30 @@ export const BTC_ETH_Ratio_Fund: PoolAssets[] = [
     }
 ]
 
-export const Fortune_Index_Fund: PoolAssets[] = [
+export const Fortune_Index_Fund_O2: PoolAssets[] = [
     {
         assetId: "bitcoin",
-        assetAllocationPercent: 25
+        assetAllocationPercent: 10
     },
     {
         assetId: "ethereum",
-        assetAllocationPercent: 20
+        assetAllocationPercent: 30
     },
-    {
-        assetId: "binancecoin",
-        assetAllocationPercent: 15
-    },
+    // {
+    //     assetId: "binancecoin",
+    //     assetAllocationPercent: 15
+    // },
     {
         assetId: "cardano",
-        assetAllocationPercent: 8
+        assetAllocationPercent: 6
     },
     {
         assetId: "solana",
-        assetAllocationPercent: 8
+        assetAllocationPercent: 10
     },
     {
         assetId: "polkadot",
-        assetAllocationPercent: 8
+        assetAllocationPercent: 6
     },
     {
         assetId: "matic-network",
@@ -50,15 +50,117 @@ export const Fortune_Index_Fund: PoolAssets[] = [
     },
     {
         assetId: "algorand",
-        assetAllocationPercent: 5
+        assetAllocationPercent: 4
     },
     {
         assetId: "elrond-erd-2",
-        assetAllocationPercent: 5
+        assetAllocationPercent: 4
     },
     {
         assetId: "cosmos",
+        assetAllocationPercent: 3
+    }
+]
+
+export const Fortune_Index_Fund_O1: PoolAssets[] = [
+    {
+        assetId: "bitcoin",
+        assetAllocationPercent: 5
+    },
+    {
+        assetId: "ethereum",
+        assetAllocationPercent: 20
+    },
+    {
+        assetId: "binancecoin",
+        assetAllocationPercent: 15
+    },
+    {
+        assetId: "cardano",
+        assetAllocationPercent: 6
+    },
+    {
+        assetId: "solana",
+        assetAllocationPercent: 10
+    },
+    {
+        assetId: "polkadot",
+        assetAllocationPercent: 6
+    },
+    {
+        assetId: "matic-network",
+        assetAllocationPercent: 15
+    },
+    {
+        assetId: "tron",
+        assetAllocationPercent: 6
+    },
+    {
+        assetId: "avalanche-2",
+        assetAllocationPercent: 6
+    },
+    {
+        assetId: "algorand",
         assetAllocationPercent: 4
+    },
+    {
+        assetId: "elrond-erd-2",
+        assetAllocationPercent: 4
+    },
+    {
+        assetId: "cosmos",
+        assetAllocationPercent: 3
+    }
+]
+
+export const Fortune_Index_Fund_O3: PoolAssets[] = [
+    {
+        assetId: "bitcoin",
+        assetAllocationPercent: 10
+    },
+    {
+        assetId: "ethereum",
+        assetAllocationPercent: 20
+    },
+    {
+        assetId: "binancecoin",
+        assetAllocationPercent: 14
+    },
+    {
+        assetId: "cardano",
+        assetAllocationPercent: 7
+    },
+    {
+        assetId: "solana",
+        assetAllocationPercent: 7
+    },
+    {
+        assetId: "polkadot",
+        assetAllocationPercent: 7
+    },
+    {
+        assetId: "matic-network",
+        assetAllocationPercent: 14
+    },
+    {
+        assetId: "tron",
+        assetAllocationPercent: 5
+    },
+    {
+        assetId: "avalanche-2",
+        assetAllocationPercent: 5
+    },
+    {
+        assetId: "algorand",
+        assetAllocationPercent: 4
+    },
+    {
+        assetId: "elrond-erd-2",
+        assetAllocationPercent: 4
+    },
+    {
+        assetId: "cosmos",
+        assetAllocationPercent: 3
     }
 ]
 

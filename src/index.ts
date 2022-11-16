@@ -10,7 +10,7 @@ import mockPoolPerformance, { PoolAssets } from "./services/mockPoolPerformance"
 import mockPoolSIPPerformance from "./services/mockPoolSIPPerformance";
 import mockPoolSIPPerformanceWithCAGR from "./services/mockPoolSIPPerformanceWithCAGR";
 import pendingPricesForAllTokens from "./services/pendingPricesForAllTokens";
-import { BTC_ETH_Ratio_Fund, Fortune_Index_Fund, DeFi_Focus_Index_Fund, Metaverse_Diverse_Index_Fund, Crypto_Bluechip_Index_Fund } from "./mockPoolsConfig";
+import { BTC_ETH_Ratio_Fund, Fortune_Index_Fund_O2, Fortune_Index_Fund_O1, Fortune_Index_Fund_O3, DeFi_Focus_Index_Fund, Metaverse_Diverse_Index_Fund, Crypto_Bluechip_Index_Fund } from "./mockPoolsConfig";
 
 const app = express();
 const server = http.createServer(app);
@@ -43,9 +43,28 @@ server.listen(PORT, async () => {
 
     // mockAllTokenPerformances();
 
-    // controlledMockPoolPerformance(Crypto_Bluechip_Index_Fund, 1000, "Crypto_Bluechip_Index_Fund");
+    // controlledMockPoolPerformance(BTC_ETH_Ratio_Fund, 1000, "Max_BTC_ETH_Ratio_Fund");
 
-    // controlledMockPoolSIPPerformance(Crypto_Bluechip_Index_Fund, 100, "Crypto_Bluechip_Index_Fund");
+    // controlledMockPoolSIPPerformance(DeFi_Focus_Index_Fund, 100, "DeFi_Focus_Index_Fund");
+
+    const allFunds: [PoolAssets[], string][] = [
+        [BTC_ETH_Ratio_Fund, "BTC_ETH_Ratio_Fund"],
+        [Fortune_Index_Fund_O2, "Fortune_Index_Fund_O2"],
+        [Fortune_Index_Fund_O1, "Fortune_Index_Fund_O1"],
+        [Fortune_Index_Fund_O3, "Fortune_Index_Fund_O3"],
+        [DeFi_Focus_Index_Fund, "DeFi_Focus_Index_Fund"],
+        [Metaverse_Diverse_Index_Fund, "Metaverse_Diverse_Index_Fund"],
+        [Crypto_Bluechip_Index_Fund, "Crypto_Bluechip_Index_Fund"]
+    ]
+
+    // for (let i = 0; i < allFunds.length; i++) {
+    //     const fundAssets = allFunds[i][0];
+    //     const fundName = allFunds[i][1];
+
+    //     controlledMockPoolPerformance(fundAssets, 1000, fundName);
+
+    //     controlledMockPoolSIPPerformance(fundAssets, 100, fundName);
+    // }
 
 
     // mockPoolPerformance(
