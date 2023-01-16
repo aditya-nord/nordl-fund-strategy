@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import prisma from "../utils/prismaClient";
 
 const createNewAssetPriceEntry = async (
@@ -5,7 +6,10 @@ const createNewAssetPriceEntry = async (
     price: number,
     priceTimestamp: Date
 ) => {
-    if (priceTimestamp.getHours() != 5 || priceTimestamp.getMinutes() != 30 || priceTimestamp.getFullYear() < 2008) {
+
+    const standardDate = dayjs().hour(0).minute(0).second(0).millisecond(0).add(dayjs().utcOffset(), "minute");
+
+    if (priceTimestamp.getHours() != standardDate.hour() || priceTimestamp.getMinutes() != standardDate.minute() || priceTimestamp.getFullYear() < 2008) {
         console.error(`Non Standard entry denied`)
         return null;
     }

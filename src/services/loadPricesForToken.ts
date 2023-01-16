@@ -2,6 +2,7 @@ import axios from "axios"
 import dayjs from "dayjs";
 import createNewAssetPriceEntry from "../repository/createNewAssetPriceEntry";
 import findAssetDetailsByCGID from "../repository/findAssetDetailsByCGID";
+import findAssetPriceOnDate from "../repository/findAssetPriceOnDate";
 
 const loadPricesForToken = async (assetId: string, numberOfDays: number) => {
     try {
@@ -11,6 +12,9 @@ const loadPricesForToken = async (assetId: string, numberOfDays: number) => {
         }
 
         const priceFeeds: [[number, number]] = await getMarketCharts(asset.cgTokenId, numberOfDays);
+        const priceTimestampS = dayjs(priceFeeds[0][0]).toDate();
+        console.log(`Starting from ${priceTimestampS}`)
+
 
         for (let i = 0; i < priceFeeds.length; i++) {
             const priceDetails = priceFeeds[i];
@@ -18,8 +22,15 @@ const loadPricesForToken = async (assetId: string, numberOfDays: number) => {
             const priceTimestamp = dayjs(priceDetails[0]).toDate();
             const price = priceDetails[1];
 
+            const check = await findAssetPriceOnDate(asset.id, priceTimestamp);
+            if (check) {
+                continue;
+            }
+
             const entry = await createNewAssetPriceEntry(asset.id, price, priceTimestamp);
-            console.log(`entry made with id: ${entry.id} - ${entry.priceTimestamp} and price: ${entry.price}`)
+            if (entry) {
+                console.log(`entry made with id: ${entry.id} - ${entry.priceTimestamp} and price: ${entry.price}`)
+            }
         }
 
     } catch (error) {
